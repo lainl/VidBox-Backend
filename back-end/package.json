@@ -18,6 +18,7 @@
   "homepage": "https://github.com/lainl/VidBox-Backend#readme",
   "description": "",
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0"
   }
 }
