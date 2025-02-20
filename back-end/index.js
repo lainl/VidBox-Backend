@@ -29,7 +29,7 @@ app.get("/", (req, res) => {
 })
 
 
-// USER API
+// #region userAPI
 app.get('/user/:id', async (req, res) => {
     const cleanId = req.params.id.trim();
   
@@ -42,33 +42,33 @@ app.get('/user/:id', async (req, res) => {
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  });
-  
+}); 
 
-  app.post('/user', async (req, res) => {
+app.post('/user', async (req, res) => {
     try {
       const username = req.body.username?.trim() || '';
       const password = req.body.password?.trim() || '';
       const email = req.body.email?.trim() || '';
-  
+
       const user = await createUser(username, password, email);
       res.status(201).json(user);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  });
-  
-  app.delete('/user/:id', async (req, res) => {
+});
+
+app.delete('/user/:id', async (req, res) => {
     const cleanId = req.params.id.trim();
-  
+
     try {
       const result = await deleteUser(cleanId);
       res.json(result);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
-  });
-  app.get('/user/username/:username', async (req, res) => {
+});
+
+app.get('/user/username/:username', async (req, res) => {
     const cleanUsername = req.params.username.trim();
 
     try {
@@ -81,11 +81,7 @@ app.get('/user/:id', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
-
-
-  
-  // END OF USER API
-  
+// #endregion userAPI
 
 
 
