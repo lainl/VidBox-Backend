@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, getUserById, deleteUser} = require('./services/mongoDB'); 
+const { createUser, getUserById, deleteUser, getUserByUsername} = require('./services/mongoDB'); 
 
 const PORT = 3000;
 
@@ -68,6 +68,22 @@ app.get('/user/:id', async (req, res) => {
       res.status(500).json({ error: error.message });
     }
   });
+  app.get('/user/username/:username', async (req, res) => {
+    const cleanUsername = req.params.username.trim();
+
+    try {
+        const user = await getUserByUsername(cleanUsername);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+  
   // END OF USER API
   
 
