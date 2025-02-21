@@ -203,6 +203,8 @@ function authenticateToken(req, res, next) {
  * blacklists the access token, and logs out of that session.
  */
 app.post('/logout', async (req, res) => {
+
+    //TODO: Fix handling tokens not being blacklisted, most likely accessing db wrong
     try {
         const accessToken = req.headers['authorization']?.split(' ')[1]; 
         const refreshToken = req.cookies.refreshToken || req.body.refreshToken?.trim();
@@ -229,8 +231,11 @@ app.post('/logout', async (req, res) => {
 
   // #endregion authAPI
 
-
+  if (require.main === module) {
 app.listen(PORT, (err) => {
     if (err) console.log(err);
     console.log(`Express Listening http://localhost:${PORT}/`);
 })
+  } //server only starts when the file is run directly so no conflicts during testing
+
+  module.exports = app;

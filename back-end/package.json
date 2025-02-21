@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.test.js --timeout 5000"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,10 @@
     "googleapis": "^144.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.13.0"
+  },
+  "devDependencies": {
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "supertest": "^7.0.0"
   }
 }
