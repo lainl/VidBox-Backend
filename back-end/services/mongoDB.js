@@ -1,6 +1,7 @@
 const { MongoClient, ObjectId } = require('mongodb');
 
 
+
 const uri = "mongodb+srv://group5:RDh7hFPdeaQnwW49@vidboxdb.6zavw.mongodb.net/VidBoxDB";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 let db;
@@ -124,7 +125,96 @@ async function deleteUser(userId) {
   }
   
   return { message: "User deleted." };
+
 }
+
+// #region tokenManagement
+/**
+ * ADD REFRESH TOKEN:
+ * Inserts a new refresh token for user authentication.
+ * The token expires automatically after 7 days.
+ * 
+ * @param {string} token - The generated refresh token.
+ * @param {string} userId - The associated user’s ID.
+ * @returns {Promise<Object>} The saved refresh token document.
+ */
+async function addRefreshToken(token, userId) {
+    await connect(); // Ensure database connection
+    const collection = db.collection("refreshTokens");
+
+    const newToken = {
+        token,
+        userId: new ObjectId(userId), // Convert to ObjectId
+        startDate: new Date(),
+        expirationDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // Set expiration for 7 days
+    };
+
+    const result = await collection.insertOne(newToken);
+    return result;
+}
+
+/**
+ * REMOVE REFRESH TOKEN:
+ * Deletes a refresh token when a user logs out.
+ * 
+ * @param {string} token - The token to be removed.
+ * @returns {Promise<Object>} Deletion result.
+ */
+async function removeRefreshToken(token) {
+    await connect();
+    const collection = db.collection("refreshTokens");
+
+    const result = await collection.deleteOne({ token });
+    return result;
+}
+
+/**
+ * FIND REFRESH TOKEN:
+ * Retrieves a refresh token from the database.
+ * 
+ * @param {string} token - The token to search for.
+ * @returns {Promise<Object|null>} The found token or null if not found.
+ */
+async function findRefreshToken(token) {
+    await connect();
+    const collection = db.collection("refreshTokens");
+
+    const result = await collection.findOne({ token });
+    return result;
+}
+
+/**
+ * BLACKLIST ACCESS TOKEN:
+ * Adds an access token to the blacklist collection.
+ * The token will automatically expire after 1 hour.
+ * 
+ * @param {string} token - The access token to be blacklisted.
+ * @returns {Promise<Object>} The saved blacklist token document.
+ */
+async function blacklistAccessToken(token) {
+    await connect(); 
+    const collection = db.collection("blackListAccessToken");
+
+    const decodedToken = jwt.decode(token);
+    if (!decodedToken || !decodedToken.exp) {
+        throw new Error("Invalid token. Unable to determine expiration.");
+    }
+
+    const expiresAt = new Date(decodedToken.exp * 1000);
+
+    const blacklistedToken = {
+        token,
+        expiresAt
+    };
+
+    const result = await collection.insertOne(blacklistedToken);
+    return result;
+}
+
+
+
+// #endregion tokenManagement
+
 
 module.exports = {
     connect,
@@ -132,4 +222,8 @@ module.exports = {
     getUserById, 
     deleteUser,
     getUserByUsername,
+    addRefreshToken,
+    removeRefreshToken,
+    findRefreshToken,
+    blacklistAccessToken,
   };
