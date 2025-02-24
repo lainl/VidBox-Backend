@@ -1,0 +1,32 @@
+{
+  "name": "vidbox-back-end",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "mocha test/**/*.test.js --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lainl/VidBox-Backend.git"
+  },
+  "author": "Austin Bechdol",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lainl/VidBox-Backend/issues"
+  },
+  "homepage": "https://github.com/lainl/VidBox-Backend#readme",
+  "description": "",
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.13.0"
+  },
+  "devDependencies": {
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
+    "supertest": "^7.0.0"
+  }
+}
