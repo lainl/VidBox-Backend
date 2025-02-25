@@ -197,6 +197,11 @@ async function blacklistAccessToken(token) {
     await connect(); 
     const collection = db.collection("blackListAccessToken");
 
+    if (await isTokenBlacklisted(token)) {
+      console.log("Token is already blacklisted:", token);
+      return { message: "Token is already blacklisted", token };
+  }
+
     const decodedToken = jwt.decode(token);
     if (!decodedToken || !decodedToken.exp) {
         throw new Error("Invalid token. Unable to determine expiration.");
@@ -210,8 +215,29 @@ async function blacklistAccessToken(token) {
     };
 
     const result = await collection.insertOne(blacklistedToken);
-    return result;
+    return {
+      message: "Token successfully blacklisted",
+      insertedId: result.insertedId,
+      token
+  };
 }
+
+
+
+
+/**
+ * @param {string} token 
+ * @returns boolean checking if the  access token is in the database or not
+ */
+async function isTokenBlacklisted(token) {
+  await connect();
+  const collection = db.collection("blackListAccessToken");
+
+  const blacklistedEntry = await collection.findOne({ token });
+  return blacklistedEntry !== null; 
+}
+
+
 
 
 
@@ -228,4 +254,5 @@ module.exports = {
     removeRefreshToken,
     findRefreshToken,
     blacklistAccessToken,
+    isTokenBlacklisted,
   };
