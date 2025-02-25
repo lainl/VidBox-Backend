@@ -7,8 +7,8 @@ class Video {
     }
   
     toString() {
-      return `User: { Title: ${this.title}, Post Date: ${this.postDate}, Google Upload Link: ${this.googleUploadLink}, UploaderID: ${this.uploaderID}}`;
+      return `Video: { Title: ${this.title}, Post Date: ${this.postDate}, Google Upload Link: ${this.googleUploadLink}, UploaderID: ${this.uploaderID}}`;
     }
   }
   
-  module.exports = User;
+  module.exports = Video;
