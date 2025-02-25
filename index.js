@@ -1,6 +1,6 @@
 const express = require("express");
 
-const { createUser, getUserById, deleteUser, getUserByUsername, addRefreshToken, removeRefreshToken, findRefreshToken, blacklistAccessToken } = require('./services/mongoDB'); 
+const { createUser, getUserById, deleteUser, getUserByUsername, addRefreshToken, removeRefreshToken, findRefreshToken, blacklistAccessToken, isTokenBlacklisted } = require('./services/mongoDB'); 
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
@@ -186,15 +186,28 @@ app.post('/refresh-token', async (req, res) => {
 });
 
 
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
-    jwt.verify(token, "vid_box_session_secret_key_very_hard_to_guess", (err, user) => {
-        if (err) return res.status(401).json({ error: 'Token expired. Please refresh token.' });
+
+    if (!token) {
+        return res.status(401).json({ error: 'Access denied. No token provided.' });
+    }
+
+    try {
+        const user = jwt.verify(token, "vid_box_session_secret_key_very_hard_to_guess");
+
+        if (await isTokenBlacklisted(token)) {
+            console.log("Token is blacklisted:", token);
+            return res.status(403).json({ error: 'Token revoked. Please log in again.' });
+        }
+
         req.user = user;
         next();
-    });
+    } catch (err) {
+        console.error("authenticateToken error:", err);
+        return res.status(401).json({ error: 'Token expired or invalid. Please refresh token.' });
+    }
 }
 
 /**
