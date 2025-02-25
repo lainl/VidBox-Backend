@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 
 const { createUser, getUserById, deleteUser, getUserByUsername, addRefreshToken, removeRefreshToken, findRefreshToken, blacklistAccessToken, isTokenBlacklisted } = require('./services/mongoDB'); 
 const jwt = require('jsonwebtoken');
@@ -11,9 +12,11 @@ const PORT = 3000;
 
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(cookieParser());
+app.use(cors());
 
 app.get("/", (req, res) => {
     console.log("/ hit");
