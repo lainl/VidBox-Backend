@@ -51,6 +51,27 @@ async function uploadVideoToDrive(file) {
     console.error("Upload error:", error.message);
     throw error;
   }
-}
+} 
+
+
+/**
+ * Deletes video from google drive
+ * @param {string} fileLink - The Google Drive file link
+ * @returns {Promise<{ success: boolean, message: string }>}
+ */
+async function removeFileFromDrive(fileLink) {
+  const fileId = extractFileId(fileLink);
+  if (!fileId) {
+    throw new Error("Invalid Google Drive link.");
+  }
+
+  try {
+    await drive.files.delete({ fileId });
+    return { success: true, message: "File deleted successfully" };
+  } catch (error) {
+    console.error("Delete error:", error.message);
+    throw new Error("Failed to delete file: " + error.message);
+  }}
+
 
 module.exports = { uploadVideoToDrive };
