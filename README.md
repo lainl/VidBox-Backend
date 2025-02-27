@@ -13,7 +13,7 @@ You can see who contributed to the first commit in the **AB_Back-end** branch:
 
 ---
 
-## 📡 Interacting with MongoDB: User Schema  
+## 📡 General API  
 
 | Method  | Endpoint                     | Description |
 |---------|------------------------------|-------------|
