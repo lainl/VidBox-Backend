@@ -21,7 +21,7 @@ You can see who contributed to the first commit in the **AB_Back-end** branch:
 | **POST** | `/user`                      | Create a new user, sends `{ username, password, email }`, returns created user. |
 | **DELETE** | `/user/:id`               | Delete user by ID, returns deletion confirmation. |
 | **GET**  | `/user/username/:username`   | Fetch user by username, returns user details or `404`. |
-| **POST** | `/login`                     | Authenticates user, returns **access & refresh tokens**. |
+| **POST** | `/login`                     | Authenticates user, returns **access & refresh tokens** and Welcome Message. |
 | **POST** | `/logout`                    | Logs out user by invalidating the **refresh token**. |
 
 ---
