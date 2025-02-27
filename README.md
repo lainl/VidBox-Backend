@@ -19,9 +19,9 @@ You can see who contributed to the first commit in the **AB_Back-end** branch:
 |---------|------------------------------|-------------|
 | **GET**  | `/user/:id`                  | Fetch user by ID, returns user details or `404`. |
 | **POST** | `/user`                      | Create a new user, sends `{ username, password, email }`, returns created user. |
-| **DELETE** | `/user/:id`               | Delete user by ID, returns deletion confirmation. |
+| **DELETE** | `/user/:id`               | Delete user by ID, returns confirmation. |
 | **GET**  | `/user/username/:username`   | Fetch user by username, returns user details or `404`. |
-| **POST** | `/login`                     | Authenticates user, returns **access & refresh tokens** and Welcome Message. |
-| **POST** | `/logout`                    | Logs out user by invalidating the **refresh token**. |
+| **POST** | `/login`                     | Authenticates user, sends `{ username, password }, returns **access & refresh tokens** and Welcome Message. |
+| **POST** | `/logout`                    | Logs out user by invalidating, the **refresh token**, sends `{ accessToken, refreshToken} returns confirmation Message. |
 
 ---
