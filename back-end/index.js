@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 
+const multer = require("multer");
+const upload = multer();
+
 
 
 const PORT = 3000;
