@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
-const { Readable } = require("stream"); // Import Readable to create a stream
-const { auth } = require("../config/googleConfig");
+const { Readable } = require("stream"); 
+const { auth } = require("./googleConfig");
 
 const drive = google.drive({ version: "v3", auth });
 

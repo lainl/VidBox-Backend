@@ -1,8 +1,8 @@
 const express = require("express");
 const cors = require('cors');
 
-const { createUser, getUserById, deleteUser, getUserByUsername, addRefreshToken, removeRefreshToken, findRefreshToken, blacklistAccessToken, isTokenBlacklisted } = require('./services/mongoDB');
-const vidoeStorageMiddleware = require('./services/videoStorageMiddleware'); 
+const { createUser, getUserById, deleteUser, getUserByUsername, addRefreshToken, removeRefreshToken, findRefreshToken, blacklistAccessToken, isTokenBlacklisted } = require('./Controller/mongoDB');
+const vidoeStorageMiddleware = require('./Controller/videoStorageMiddleware'); 
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
