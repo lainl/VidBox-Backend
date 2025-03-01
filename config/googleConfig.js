@@ -5,12 +5,9 @@ const fs = require("fs");
 /**
  * Google Auth Object
  * @type {google.auth.GoogleAuth}
- * 
- *
  */
 
 const serviceAccountPath = path.join(__dirname, "../config/googleServiceAccount.json");
-
 
 if (!fs.existsSync(serviceAccountPath)) {
   console.error("Service Account JSON file is missing.");
@@ -18,12 +15,12 @@ if (!fs.existsSync(serviceAccountPath)) {
 }
 
 
-const credentials = JSON.parse(fs.readFileSync(serviceAccountPath));
+const credentials = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
 
 
 const auth = new google.auth.GoogleAuth({
-  credentials,
+  credentials, 
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
-module.exports = { auth };
+module.exports = { auth, credentials };
