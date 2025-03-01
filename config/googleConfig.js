@@ -1,25 +1,23 @@
 const { google } = require("googleapis");
-const path = require("path");
-const fs = require("fs");
+require("dotenv").config();
 
 /**
  * Google Auth Object
  * @type {google.auth.GoogleAuth}
  */
 
-const serviceAccountPath = path.join(__dirname, "../config/googleServiceAccount.json");
-
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error("Service Account JSON file is missing.");
+if (!process.env.GOOGLE_SERVICE_ACCOUNT_KEY) {
+  console.error(" GOOGLE_SERVICE_ACCOUNT_KEY is missing from .env file.");
   process.exit(1);
 }
 
 
-const credentials = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
-
+const credentials = JSON.parse(
+  Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_KEY, "base64").toString("utf8")
+);
 
 const auth = new google.auth.GoogleAuth({
-  credentials, 
+  credentials,
   scopes: ["https://www.googleapis.com/auth/drive"],
 });
 
