@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const User = require('../model/user');
-const Video = require('../model/video');
+const User = require('../Model/user');
+const Video = require('../Model/video');
 
 describe('Model Tests', function () {
     it('should create a User instance and print it', function () {

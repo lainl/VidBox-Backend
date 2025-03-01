@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const { expect } = require("chai");
-const { uploadVideoToDrive } = require("../services/googleCloudVideoStoring");
+const { uploadVideoToDrive } = require("../Controller/googleCloudVideoStoring");
 
 describe("Google Drive Video Storage", function () {
   this.timeout(60000);
