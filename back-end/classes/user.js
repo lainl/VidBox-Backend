@@ -1,22 +1,33 @@
-<<<<<<< Updated upstream
-export default class user{
-constructor(email, username, password){
-=======
 const { default: mongoose } = require("mongoose");
 
 class User {
   constructor(email, userId, username, password, profilePicture, bio, creationDate, uploadedVidsIDList, uploadedCommentsIDList) {
->>>>>>> Stashed changes
     this.email = email;
+    this.userId = userId;
     this.username = username;
     this.password = password;
-}
-<<<<<<< Updated upstream
-toString() {
-    return `User: { email: ${this.email}, username: ${this.username}, password: ${this.password} }`;
+    this.profilePicture = profilePicture;
+    this.bio = bio;
+    this.creationDate = creationDate;
+    this.uploadedVidsIDList = uploadedVidsIDList;
+    this.uploadedCommentsIDList = uploadedCommentsIDList;
   }
+
+  toString() {
+    return `User: 
+    {ProfilePic: ${this.profilePicture}, 
+      email: ${this.email},
+       userID: ${this.userId},
+        username: ${this.username},
+         password: ${this.password},
+          bio: ${this.bio},
+           creationDate: ${this.creationDate}, 
+           uploadedVidsIDList: ${this.uploadedVidsIDList}, 
+           uploadedCommentsIDList: ${this.uploadedCommentsIDList} }`;
+  }
+
+
 }
-=======
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -24,19 +35,7 @@ const UserSchema = new mongoose.Schema({
     index: { unique: true }
   },
   username: string,
-  password: string,
-  profilePicture: string,
-  userId: {
-    type: int,
-    index: {unique: true}
-  },
-  bio: string,
-  creationDate: string,
-  uploadedVidsIDList: string,
-  uploadedCommentsIDList: string
-
-
+  password: string
 })
 
 module.exports = mongoose.model(User, UserSchema);
->>>>>>> Stashed changes
