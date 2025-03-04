@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const vidoeStorageMiddleware = require("../Controller/videoStorageMiddleware");
+const videoUpload = require("../Controller/videoStorageMiddleware");
 
-router.post("/upload", vidoeStorageMiddleware, (req, res) => {
+router.post("/upload", videoUpload, (req, res) => {
   res.json(req.file);
 });
 

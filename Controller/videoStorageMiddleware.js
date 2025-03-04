@@ -17,7 +17,7 @@ const upload = multer({
   }
 });
 
-const vidoeStorageMiddleware = (req, res, next) => {
+const videoUpload = (req, res, next) => {
   upload.single('video')(req, res, async (err) => {
     if (err) {
       if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
@@ -62,4 +62,4 @@ const vidoeStorageMiddleware = (req, res, next) => {
 };
 
 
-module.exports = vidoeStorageMiddleware;
+module.exports = videoUpload;
