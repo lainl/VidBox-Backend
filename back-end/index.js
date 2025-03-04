@@ -5,9 +5,10 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const cookieParser = require('cookie-parser');
 
+const mongoose = require('mongoose');
 
 
-const PORT = 3000;
+const PORT = 4000;
 
 const app = express();
 
@@ -237,5 +238,16 @@ app.listen(PORT, (err) => {
     console.log(`Express Listening http://localhost:${PORT}/`);
 })
   } //server only starts when the file is run directly so no conflicts during testing
+
+  module.exports.connect = (uri) => {
+    mongoose.connect(uri);
+  
+    // plug in the promise library
+    mongoose.Promise = global.Promise;
+  
+    mongoose.connection.on('error', (err) => {
+      console.error(`Mongoose connection error: ${err}`);
+      process.exit(1);
+    });}
 
   module.exports = app;
