@@ -1,8 +1,10 @@
-const { google } = require("googleapis");
+const { drive } = require("google-drive-only");
 const { Readable } = require("stream");
 const { auth } = require("./googleConfig");
-const { findVideoById } = require('./mongoDB');
-const drive = google.drive({ version: "v3", auth });
+const { findVideoById } = require("./mongoDB");
+
+// Initialize the Drive instance once:
+const driveInstance = drive({ version: "v3", auth });
 
 function bufferToStream(buffer) {
   const stream = new Readable();
@@ -18,10 +20,10 @@ async function uploadVideoToDrive(file) {
   const media = { mimeType: file.mimetype, body: bufferToStream(file.buffer) };
 
   try {
-    const response = await drive.files.create({
+    const response = await driveInstance.files.create({
       resource: fileMetadata,
       media,
-      fields: "id, webViewLink"
+      fields: "id, webViewLink",
     });
     return response.data;
   } catch (error) {
@@ -29,8 +31,6 @@ async function uploadVideoToDrive(file) {
     throw error;
   }
 }
-
-
 
 async function streamVideoFromDrive(req, res) {
   try {
@@ -62,7 +62,7 @@ async function streamVideoFromDrive(req, res) {
 
     // 5) Fetch file metadata (name, mimeType) from Google Drive
     console.log("[streamVideoFromDrive] Requesting file metadata from Google Drive...");
-    const meta = await drive.files.get({ fileId, fields: "id, name, mimeType" });
+    const meta = await driveInstance.files.get({ fileId, fields: "id, name, mimeType" });
     console.log("[streamVideoFromDrive] File metadata response:", meta.data);
 
     if (!meta.data) {
@@ -76,7 +76,7 @@ async function streamVideoFromDrive(req, res) {
 
     // 6) Get a readable stream of the file content
     console.log("[streamVideoFromDrive] Requesting file stream from Google Drive...");
-    const driveStream = await drive.files.get(
+    const driveStream = await driveInstance.files.get(
       { fileId, alt: "media" },
       { responseType: "stream" }
     );
@@ -92,7 +92,6 @@ async function streamVideoFromDrive(req, res) {
     console.warn("[streamVideoFromDrive] WARNING: No partial content handling. Large files may fail on some browsers.");
 
     // 8) Pipe the data to the response
-    // Attach extra debug for chunk sizes
     let totalBytes = 0;
     driveStream.data
       .on("data", (chunk) => {
@@ -115,22 +114,19 @@ async function streamVideoFromDrive(req, res) {
   }
 }
 
-
-
 async function removeFileFromDrive(fileLink) {
   const fileId = extractFileId(fileLink);
   if (!fileId) {
     throw new Error("Invalid Google Drive link.");
   }
   try {
-    await drive.files.delete({ fileId });
+    await driveInstance.files.delete({ fileId });
     return { success: true, message: "File deleted successfully" };
   } catch (error) {
     console.error("Delete error:", error.message);
     throw new Error("Failed to delete file: " + error.message);
   }
 }
-
 
 function extractFileId(googleDriveLink) {
   const match = googleDriveLink.match(/\/d\/(.*?)(\/|$)/);
