@@ -6,7 +6,7 @@ const {
   videoDelete,
   videoFindById
 } = require("../Controller/videoStorageMiddleware");
-const { streamVideoFromDrive } = require("../Controller/googleCloudVideoStoring");
+const { streamVideoFromDrive } = require("../Controller/googleCloudStoring");
 
 
 router.post("/video/upload", uploadVideo);

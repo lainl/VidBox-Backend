@@ -129,6 +129,29 @@ async function deleteUser(userId) {
   return { message: "User deleted." };
 
 }
+/**
+ * UPDATE: Updates user fields like bio and profile picture.
+ * @param {string} userId 
+ * @param {Object} updates - The fields to update (e.g., { bio: "new bio", profilePicture: "newURL" }).
+ * @returns {Promise<Object>} The updated user document.
+ */
+async function updateUser(userId, updates) {
+  await connect();
+  const collection = db.collection("User");
+
+  const result = await collection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: updates }
+  );
+
+  if (result.matchedCount === 0) {
+    throw new Error("User not found.");
+  }
+
+  const updatedUser = await collection.findOne({ _id: new ObjectId(userId) });
+  return updatedUser;
+}
+
 
 // #region tokenManagement
 /**
@@ -325,6 +348,7 @@ async function findVideoById(videoId) {
 //# endregion videoManagement
 
 
+
 module.exports = {
     connect,
     createUser,
@@ -341,4 +365,5 @@ module.exports = {
     deleteVideoById,
     updateVideoTitleById,
     findVideoById,
+    updateUser
   };

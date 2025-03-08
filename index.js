@@ -16,6 +16,7 @@ app.use(require("./Routes/home"));
 app.use(require("./Routes/video"));
 app.use(require("./Routes/user"));
 app.use(require("./Routes/auth"));
+app.use(require("./Routes/profile"));
 
 
 if (require.main === module) {

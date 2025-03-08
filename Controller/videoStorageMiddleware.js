@@ -3,7 +3,7 @@ const { ObjectId } = require('mongodb');
 const { 
   uploadVideoToDrive, 
   removeFileFromDrive 
-} = require('./googleCloudVideoStoring');
+} = require('./googleCloudStoring');
 const {
   addVideo,
   updateVideoTitleById,
