@@ -28,4 +28,7 @@ You can see who contributed to the first commit in the **AB_Back-end** branch:
 | **DELETE** | `/video/:videoId` | Deletes a video, sends **{ videoId, userId, driveLink}**, removes from database and Google Drive, returns **{ message: "Video deleted." }** or an error. |
 | **GET**  | `/video/stream/:videoId`         | Streams video from Google Drive, sends **{ videoId }**, returns video stream or `404`. |
 | **PATCH**  | `/video/:videoId`                | Updates a video’s title. Expects **{ newTitle }** in request body. |
+| **POST** | `/profile/picture`         | Uploads or updates the user’s profile picture. Expects multipart/form-data with `userId` and `file`. Returns `{ success, message, profilePicUrl, user }`. |
+| **POST** | `/profile/bio`             | Adds or updates the user’s bio. Expects JSON body with `{ userId, bio }`. Returns `{ success, message, updatedBio }`. |
+| **GET**  | `/profile/picture/:userId` | Retrieves the user’s profile picture from Google Drive. Returns an image stream or `404` if not found.              |
 ---
