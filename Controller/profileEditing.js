@@ -1,5 +1,5 @@
 const multer = require("multer");
-const { addProfilePicToDrive, removeFileFromDrive } = require("./googleCloudStoring");
+const { addProfilePicToDrive, removeFileFromDrive, getProfilePicFromDrive } = require("./googleCloudStoring");
 const { getUserById, updateUser } = require("./mongoDB");
 
 const upload = multer();
@@ -36,8 +36,8 @@ async function uploadProfilePicture(req, res) {
         res.status(500).json({ success: false, error: error.message });
       }
     });
-  }
-  
+}
+
 async function updateBio(req, res) {
     try {
         const { userId, bio } = req.body;
@@ -56,4 +56,23 @@ async function updateBio(req, res) {
     }
 }
 
-module.exports = { uploadProfilePicture, updateBio };
+async function getProfilePicture(req, res) {
+    try {
+      const { userId } = req.params;
+      if (!userId) {
+        return res.status(400).json({ error: "User ID is required" });
+      }
+      const user = await getUserById(userId);
+      if (!user || !user.profilePicture) {
+        return res.status(404).json({ error: "Profile picture not found" });
+      }
+      const { stream, mimeType } = await getProfilePicFromDrive(user.profilePicture);
+      res.setHeader("Content-Type", mimeType);
+      stream.pipe(res);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+}
+  
+
+module.exports = { uploadProfilePicture, updateBio, getProfilePicture };

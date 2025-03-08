@@ -63,6 +63,19 @@ describe("Profile Editing API", function() {
         });
     });
 
+    it("should retrieve the user's profile picture", function(done) {
+        this.timeout(10000);
+        request(app)
+          .get(`/profile/picture/${testUserId}`)
+          .expect(200)
+          .expect("Content-Type", /image/)
+          .end((err, res) => {
+            if (err) return done(err);
+            done();
+          });
+      });
+      
+
     it("should update the bio if already present", function(done) {
       request(app)
         .post("/profile/bio")

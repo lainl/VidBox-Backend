@@ -147,6 +147,18 @@ async function addProfilePicToDrive(file) {
   }
 }
 
+async function getProfilePicFromDrive(fileLink) {
+  const fileId = extractFileId(fileLink);
+  if (!fileId) {
+    throw new Error("Invalid Google Drive link.");
+  }
+  const meta = await driveInstance.files.get({ fileId, fields: "mimeType" });
+  const mimeType = meta.data.mimeType || "application/octet-stream";
+  const response = await driveInstance.files.get({ fileId, alt: "media" }, { responseType: "stream" });
+  return { stream: response.data, mimeType };
+}
+
+
 function extractFileId(googleDriveLink) {
   const match = googleDriveLink.match(/\/d\/(.*?)(\/|$)/);
   return match ? match[1] : null;
@@ -156,5 +168,6 @@ module.exports = {
   uploadVideoToDrive,
   streamVideoFromDrive,
   removeFileFromDrive,
-  addProfilePicToDrive
+  addProfilePicToDrive,
+  getProfilePicFromDrive
 };
