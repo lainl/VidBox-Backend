@@ -3,7 +3,7 @@ const { Readable } = require("stream");
 const { auth } = require("./googleConfig");
 const { findVideoById } = require("./mongoDB");
 
-// Initialize the Drive instance once:
+
 const driveInstance = drive({ version: "v3", auth });
 
 function bufferToStream(buffer) {
@@ -128,6 +128,25 @@ async function removeFileFromDrive(fileLink) {
   }
 }
 
+async function addProfilePicToDrive(file) {
+  if (!file) throw new Error("No file provided!");
+  const folderId = "1kplOvlDot2G1oEp08khixAJZeIjcTdGZ";
+  const fileMetadata = { name: file.originalname, parents: [folderId] };
+  const media = { mimeType: file.mimetype, body: bufferToStream(file.buffer) };
+
+  try {
+    const response = await driveInstance.files.create({
+      resource: fileMetadata,
+      media,
+      fields: "id, webViewLink",
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Upload error:", error.message);
+    throw error;
+  }
+}
+
 function extractFileId(googleDriveLink) {
   const match = googleDriveLink.match(/\/d\/(.*?)(\/|$)/);
   return match ? match[1] : null;
@@ -136,5 +155,6 @@ function extractFileId(googleDriveLink) {
 module.exports = {
   uploadVideoToDrive,
   streamVideoFromDrive,
-  removeFileFromDrive
+  removeFileFromDrive,
+  addProfilePicToDrive
 };
