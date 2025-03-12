@@ -3,7 +3,6 @@ const chai = require('chai');
 const expect = chai.expect;
 const app = require('../index'); 
 
-
 describe('Auth: Login & Logout', function () {
     let accessToken;
     let refreshToken;
@@ -60,12 +59,10 @@ describe('Auth: Login & Logout', function () {
         const response = await request(app)
             .get('/testAuthPage')
             .set('Authorization', `Bearer ${accessToken}`);
-    
-       
-        expect([401, 403]).to.include(response.status);
+
+        expect(response.status).to.equal(401);
         expect(response.body).to.have.property('error', 'Token revoked. Please log in again.');
     });
-    
 
     it('Should not allow refresh with revoked token', async function () {
         const response = await request(app)
